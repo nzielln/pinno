@@ -1,0 +1,433 @@
+PIZZA WEB APP NOTES.
+
+Homepage
+	Create an account or sign in
+		Create account
+			Add date to users table in Django
+			Take user to profile page where we show past orders
+				If no past order, message "Create your first order!"
+				use Handlebars to create new order card
+		Sign in
+			Check that user exists
+			Take user to profile page where we show past orders
+				If no past order, message "Create your first order!"
+
+Order Page
+	When order is clicked, open order information page
+	When re-order is clicked, go to shopping card with details
+		When add more items is clicked, got to main menu page
+			When + is clicked, go to options if we have any,
+				When + is clicked, add to cart, if clicked again, remove from cart
+		When proceed to payment is clicked, go to success page
+
+Menu Page
+	Click category
+		Show items for category and item to shopping cart (use Handlebars)
+			When more options clicked, add to options section of item in shopping cart
+				If cancel, remove all from shopping cart. 
+				If proceed, go to shopping cart, show information
+				Proceed to payment complete page
+
+TABLES
+
+Users,
+First name, last name, email, password
+
+
+Orders, relate to user-id
+Items, Size, Price, Options, User
+
+Items
+Pizza
+Can you have a column with two columns
+
+PIZZA_name_topping
+
+Pizza		topping	
+PIZZA_name	1		
+
+
+id			Small	Large
+PIZZA_name	$$$		$$$
+
+
+Subs
+
+
+Salad
+Items, Price
+
+Pasta
+Item, Price
+
+pip3 install pylint-django
+
+
+DJANGO PROJECT GUIDE
+
+$ django-admin startproject <projectname>
+$ python manage.py startalp <appname>
+	Write app code inside views.py (analogous to app.py)
+	Add urls to urls.py in app and project directory
+	Always remember to import things!
+$ python manage.py runserver [to run app]
+
+CREATE MODEL IN models.py
+$ python manage.py makemigrations 
+$ python manage.py sqlmigrate app name <model_number>
+$ python manage.py migrate
+
+
+
+
+order = {
+	"user": "Admin",
+	"date": datetime.now(),
+	"items" : [],
+	"address": "None"
+
+}
+
+"items = [
+	{
+		"item_name": ,
+		"size": ,
+		"topping": #,
+		"toppings": [],
+		"price": $##.##,
+
+	}
+]		
+
+import csv
+import os
+with open("orders/csv_files/salad.csv") as f:
+	reader = csv.reader(f)
+	for row in reader:
+		item = Salad(name = row[0], price = row[1])
+		item.save()
+
+with open("orders/csv_files/toppings.csv") as f:
+	reader = csv.reader(f)
+	for row in reader:
+		item = Toppings(topping = row[0], topping_type=row[1])
+		item.save()
+
+with open("orders/csv_files/pizza.csv") as f:
+	reader = csv.reader(f)
+	for row in reader:
+		item = Pizza(name = row[0], toppings = row[1], small = row[2], large = row[3])
+		item.save()
+
+
+		js for main page background
+
+		every 15 seconds, change image
+		if url = main_image
+		style =  background-image: url(../images/main_image.jpg);
+    background-size: 50%;
+    background-position: 0% 50%;
+    background-repeat: no-repeat;
+
+	else 
+	 background-image: url(../images/main_image.jpg);
+    background-size: cover;
+	background-position: center;
+    background-repeat: no-repeat;
+	height: 100%;
+
+	0 [3.5] 1 [3.5] 2 [3.5] 3 [3.5] 4 [3.5] 0
+
+	end		center	center	center	center	end
+	0		20		40		60		80		100
+
+	When item is selected, GET
+
+	Open CART page with item data and save this data to a dict and this dict to a session <tr>
+        <td style="margin-left:10px;"><i class="fas fa-times"></i></td>
+        <td>
+          {{ item.name }} <br />
+          {% if item.toppings == 0%}
+          <span>No Toppings</span>
+          {% elif item.toppings == 1 %}
+          <span>{{ item.toppings }} Topping</span>
+          {% else %}
+          <span>{{ item.toppings }} Toppings</span>
+          {% endif %}
+        </td>
+        <td id="price">{{ item.small }}</td>
+      </tr>
+
+
+	  context = {
+		  "items" : {
+			  "item" : Object
+		  }
+	  }
+
+
+	  when you click item, go to options page but save everything in session then, when you click continue, go to cart page and add items
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	  c = []
+    prices = []
+    
+    request.session["pizza"] 
+    request.session["sub"] 
+    request.session["pasta"] 
+    request.session["salad"] 
+    
+    cart_items = request.session["items"]
+    pizza_list = request.session["pizza"]
+    pasta_list = request.session["pasta"]
+    salad_list = request.session["salad"]
+    sub_list = request.session["sub"]
+    
+    
+    if request.method == "GET":
+        #pizza
+        if item_name == "Regular" or item_name == "Sicilian":
+            if item_id not in request.session["pizza"]:
+                pizza_list.append(item_id)
+                request.session["pizza"] = pizza_list
+            else: 
+                request.session["pizza"] = pizza_list
+            """ for an_id in request.session["pizza"]:
+                new_item = Pizza.objects.get(pk=an_id)
+                c.append(new_item)
+                request.session["items"] = c """
+        #pasta
+        elif "Baked" in item_name:
+            if item_id not in request.session["pasta"]:
+                pasta_list.append(item_id)
+                request.session["psta"] = pasta_list
+            else: 
+                request.session["pasta"] = pasta_list 
+            """ for an_id in request.session["pasta"]:
+                new_item = Pasta.objects.get(pk=an_id)
+                c.append(new_item)
+                request.session["items"] = c """
+        #salad
+        elif "Salad" in item_name or item_name == "Antipasto":
+            if item_id not in request.session["salad"]:
+                salad_list.append(item_id)
+                request.session["salad"] = salad_list
+            else: 
+                request.session["salad"] = salad_list 
+            """ for an_id in request.session["salad"]:
+                new_item = Salad.objects.get(pk=an_id)
+                c.append(new_item) 
+                request.session["items"] = c  """  
+        #subs and everything else...
+        else:
+            if item_id not in request.session["sub"]:
+                sub_list.append(item_id)
+                request.session["sub"] = sub_list
+            else: 
+                request.session["sub"] = sub_list
+            """ for an_id in request.session["sub"]:
+                new_item = Subs.objects.get(pk=an_id)
+                c.append(new_item)  
+                request.session["items"] = c """
+                
+    
+    #get items and add to list
+        for an_id in request.session["pizza"]:
+            new_item = Pizza.objects.get(pk=an_id)
+            c.append(new_item)
+        for an_id in request.session["sub"]:
+            new_item = Subs.objects.get(pk=an_id)
+            c.append(new_item)
+        for an_id in request.session["pasta"]:
+            new_item = Pasta.objects.get(pk=an_id)
+            c.append(new_item)
+        for an_id in request.session["salad"]:
+            new_item = Salad.objects.get(pk=an_id)
+            c.append(new_item)
+            
+
+  # get total price
+    for item in c:
+        #pasta and salads, no sizes
+        if item.name == "Antipasto" or "Salad" in item.name or "Baked" in item.name:
+            price = item.price
+            prices.append(price)
+        #subs and pizza, have sizes
+        else:
+            price = item.small
+            prices.append(price)
+   
+                
+         
+    cart_items["pasta"] = request.session["pasta"]
+    cart_items["salad"] = request.session["salad"]
+    cart_items["subs"] = request.session["sub"]
+    cart_items["pizza"] = request.session["pizza"]
+    request.session["items"] = cart_items
+
+    
+    itemss = request.session["items"]
+
+    context = {
+        "items" : c,
+        "sum" : sum(prices),
+       
+    }     
+
+
+
+
+
+	    
+    request.session["pizza"] 
+    request.session["sub"] 
+    request.session["pasta"] 
+    request.session["salad"] 
+    
+    cart_items = request.session["items"]
+    pizza_list = request.session["pizza"]
+    pasta_list = request.session["pasta"]
+    salad_list = request.session["salad"]
+    sub_list = request.session["sub"]
+    
+    
+    if request.method == "GET":
+        #pizza
+        if item_name == "Regular" or item_name == "Sicilian":
+            if item_id not in request.session["pizza"]:
+                pizza_list.append(item_id)
+                request.session["pizza"] = pizza_list
+            else: 
+                request.session["pizza"] = pizza_list
+        #pasta
+        elif "Baked" in item_name:
+            if item_id not in request.session["pasta"]:
+                pasta_list.append(item_id)
+                request.session["psta"] = pasta_list
+            else: 
+                request.session["pasta"] = pasta_list 
+
+        #salad
+        elif "Salad" in item_name or item_name == "Antipasto":
+            if item_id not in request.session["salad"]:
+                salad_list.append(item_id)
+                request.session["salad"] = salad_list
+            else: 
+                request.session["salad"] = salad_list 
+
+        #subs and everything else...
+        else:
+            if item_id not in request.session["sub"]:
+                sub_list.append(item_id)
+                request.session["sub"] = sub_list
+            else: 
+                request.session["sub"] = sub_list
+                
+    django - ajax
+
+	item clicked --> create new "active_item" session and go to options (have a section to store item_name and id on page from data in session??)
+		when topping is picked, add to array and the use "post" to send array through ajax to django
+			number of allowable toppings is controlled by item id --> compare this to the items in array
+		django adds items in array to "options" of session object "active_item"
+		at next page
+
+
+allthe_items 
+
+[{'name': 3, 'pk': 3, 'options': ['Canadian Bacon', 'Buffalo Chicken']}]
+
+
+
+
+  if (sbtn !== null && food_card !== null) {
+    const size_btn = document.querySelector("#selected");
+    let size;
+    if (size_btn !== null) {
+      size = size_btn.innerHTML;
+
+      sbtn.onclick = () => {
+        size_data = sbtn.innerHTML;
+        console.log(size_data);
+
+        data = {
+          size: size_data
+        };
+
+        let size_data_json = JSON.stringify(data);
+        size_xhr.open("POST", "/size", true);
+        size_xhr.setRequestHeader(
+          "Content-type",
+          "application/json; charset=utf-8"
+        );
+        size_xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+        size_xhr.send(size_data_json);
+        size_xhr.onload = () => {
+          console.log(size_data_json);
+        };
+      };
+    }
+  }
+  if (lbtn !== null && food_card !== null) {
+    const size_btn = document.querySelector("#selected");
+    if (size_btn !== null) {
+      size = size_btn.innerHTML;
+      lbtn.onclick = () => {
+        size_data = lbtn.innerHTML;
+        console.log(size_data);
+        data = {
+          size: size_data
+        };
+
+        let size_data_json = JSON.stringify(data);
+        size_xhr.open("POST", "/size", true);
+        size_xhr.setRequestHeader(
+          "Content-type",
+          "application/json; charset=utf-8"
+        );
+        size_xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+        size_xhr.send(size_data_json);
+        size_xhr.onload = () => {
+          console.log(size_data_json);
+        };
+      };
+    }
+  }
+
+
+
+  for i in all_items:
+                if i["name"] == name and i["pk"] == pk:
+                    ["options"] = options
+                        
+                    new_item = {
+                        "name": name,
+                        "price": i["price"],
+                        "size": i["size"],
+                        "pk": pk,
+                        "options": options,
+                    }
+                    request.session["some"] = new_item
+                    session_items.append(new_item)
+                    request.session["allthe_items"] = session_items
+
+
+When complete order is clicked, 
+
+
+//re-order
+
+get item based on 
